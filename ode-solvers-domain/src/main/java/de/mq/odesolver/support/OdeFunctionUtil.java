@@ -22,4 +22,6 @@ public interface OdeFunctionUtil {
 	 */
 	Invocable prepareFunction(String function);
 
+	double[] invokeVectorFunction(final Invocable invocable, final double[] vector, final double x);
+
 }

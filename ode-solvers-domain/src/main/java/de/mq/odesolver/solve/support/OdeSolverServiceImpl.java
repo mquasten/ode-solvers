@@ -1,6 +1,9 @@
 package de.mq.odesolver.solve.support;
 
 import java.lang.reflect.Constructor;
+import org.apache.commons.math3.ode.FirstOrderIntegrator;
+import org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,10 +22,17 @@ class OdeSolverServiceImpl implements OdeSolverService {
 
 	private final Map<Algorithm, Class<? extends OdeResultCalculator>> solvers = Map.of(Algorithm.EulerPolygonal, EulerCalculatorImpl.class, Algorithm.RungeKutta2ndOrder,
 			RungeKutta2CalculatorImpl.class, Algorithm.RungeKutta4thOrder, RungeKutta4CalculatorImpl.class);
+	
+	
+	private final Map<Algorithm, Class<? extends FirstOrderIntegrator>> systemSolvers = Map.of(Algorithm.DormandPrince853Integrator, DormandPrince853Integrator.class);
+	
 
 	@Override
 	public final OdeSolver odeSolver(final Language language, final Algorithm algorithm, final String function) {
-		try {
+		if( algorithm.isSystem()) {
+			throw new IllegalArgumentException(String.format("Odesystems not supported, algorithm %s", algorithm.name()));
+		}
+		try {	
 			final OdeResultCalculator odeResultCalculator = solvers.get(algorithm).getDeclaredConstructor(OdeFunctionUtil.class, String.class).newInstance(newOdeFunctionUtil(language), function);
 			return new OdeSolverImpl(odeResultCalculator);
 		} catch (final Exception exception) {

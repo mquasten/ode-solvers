@@ -88,5 +88,19 @@ class OdeFunctionUtilTest {
 		
 	}	
 	
+	@ParameterizedTest
+	@EnumSource
+	void berechneDglSystem(final Language language) {
+		final OdeFunctionUtil odeFunctionUtil = new OdeFunctionUtilImpl(language);
+		final Invocable invocable = odeFunctionUtil.prepareFunction("[y[1],y[2],y[0]+y[1]+y[2]]");
+
+		final double [] results = odeFunctionUtil.invokeVectorFunction(invocable, new double[] { 1, 2, 3 }, 3);
+		assertEquals(3, results.length);
+		assertEquals(2d, results[0]);
+		assertEquals(3, results[1]);
+		assertEquals(6, results[2]);
+		
+	}
+	
 
 }

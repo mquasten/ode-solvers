@@ -29,7 +29,7 @@ class OdeSolverServiceImplTest {
 	@ParameterizedTest
 	@EnumSource
 	void odeSolver(final Language language) {
-		Arrays.asList(Algorithm.values()).forEach(algorithm -> odeSolverService.odeSolver(language, algorithm, ODE_STRING));
+		Arrays.asList(Algorithm.values()).stream().filter(algorithm -> !algorithm.isSystem()).forEach(algorithm -> odeSolverService.odeSolver(language, algorithm, ODE_STRING));
 	}
 
 	@ParameterizedTest
@@ -70,8 +70,14 @@ class OdeSolverServiceImplTest {
 	
 	@Test
 	void algorithms() {
-		final var orders= Map.of(Algorithm.EulerPolygonal, 1, Algorithm.RungeKutta2ndOrder, 2, Algorithm.RungeKutta4thOrder, 4);
+		final var orders= Map.of(Algorithm.EulerPolygonal, 1, Algorithm.RungeKutta2ndOrder, 2, Algorithm.RungeKutta4thOrder, 4, Algorithm.DormandPrince853Integrator, 8);
 		Arrays.asList(Algorithm.values()).forEach(algorithm -> assertEquals(orders.get(algorithm), algorithm.order()));
+	}
+	
+	@Test
+	void isSystem() {
+		final var orders= Map.of(Algorithm.EulerPolygonal, false, Algorithm.RungeKutta2ndOrder, false, Algorithm.RungeKutta4thOrder, false, Algorithm.DormandPrince853Integrator, true);
+		Arrays.asList(Algorithm.values()).forEach(algorithm -> assertEquals(orders.get(algorithm), algorithm.isSystem()));
 	}
 
 }

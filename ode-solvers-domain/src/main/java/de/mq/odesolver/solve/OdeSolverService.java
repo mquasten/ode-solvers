@@ -7,17 +7,28 @@ import de.mq.odesolver.support.OdeFunctionUtil.Language;
 public interface OdeSolverService {
 
 	public enum Algorithm {
-		EulerPolygonal(1), RungeKutta2ndOrder(2), RungeKutta4thOrder(4);
+		EulerPolygonal(1), RungeKutta2ndOrder(2), RungeKutta4thOrder(4) , DormandPrince853Integrator(8,true);
 
 		private final int order;
+		private final boolean system;
 
-		Algorithm(final int order) {
+		Algorithm(final int order, boolean system) {
 			this.order = order;
+			this.system=system;
+		}
+		Algorithm(final int order) {
+			this(order, false);
 		}
 
 		public final int order() {
 			return order;
 		}
+		
+		public final boolean isSystem() {
+			return system;
+		}
+		
+		
 
 	}
 

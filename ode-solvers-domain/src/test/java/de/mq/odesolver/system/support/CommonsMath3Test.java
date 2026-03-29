@@ -60,7 +60,6 @@ class CommonsMath3Test {
 
 	};
 
-
 	@Test
 	void solveSystemFirstOrderOde() {
 
