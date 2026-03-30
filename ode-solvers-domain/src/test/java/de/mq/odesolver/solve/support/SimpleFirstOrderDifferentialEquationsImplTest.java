@@ -1,4 +1,4 @@
-package de.mq.odesolver.system.support;
+package de.mq.odesolver.solve.support;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -26,7 +26,7 @@ class SimpleFirstOrderDifferentialEquationsImplTest {
 		final var dgl = new SimpleFirstOrderDifferentialEquationsImpl(resultCalculator, 3);
 		// y, y', Y''
 		final double[] y = { randomDouble(), randomDouble(), randomDouble() };
-		Mockito.when(resultCalculator.calculate(x, y)).thenReturn(dy);
+		Mockito.when(resultCalculator.f(y, x)).thenReturn(dy);
 		final double[] result = { Double.NaN, Double.NaN, Double.NaN };
 		dgl.computeDerivatives(x, y, result);
 
@@ -46,7 +46,7 @@ class SimpleFirstOrderDifferentialEquationsImplTest {
 		final var dgl = new SimpleFirstOrderDifferentialEquationsImpl(resultCalculator, 3);
 		// y, y', Y''
 		final double[] y = { randomDouble(), randomDouble(), randomDouble() };
-		Mockito.when(resultCalculator.calculate(x, y)).thenReturn(dy);
+		Mockito.when(resultCalculator.f(y,x)).thenReturn(dy);
 		final double[] result = { Double.NaN, Double.NaN, Double.NaN };
 
 		assertEquals(String.format(SimpleFirstOrderDifferentialEquationsImpl.MESSAGE_REQUIRED_FORMAT, "y"),

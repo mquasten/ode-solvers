@@ -52,9 +52,9 @@ class FunctionServiceImpl implements FunctionService {
 	private OdeFunctionUtil newOdeFunctionUtil(final Language language) throws Exception {
 		@SuppressWarnings("unchecked")
 		final Constructor<? extends OdeFunctionUtil> constructor = (Constructor<? extends OdeFunctionUtil>) Class.forName("de.mq.odesolver.support.OdeFunctionUtilImpl")
-				.getDeclaredConstructor(Language.class, String.class);
+				.getDeclaredConstructor(Language.class, String.class, boolean.class);
 		constructor.setAccessible(true);
-		return constructor.newInstance(language, "k");
+		return constructor.newInstance(language, "k", false);
 	}
 
 }

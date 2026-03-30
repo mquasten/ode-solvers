@@ -1,4 +1,4 @@
-package de.mq.odesolver.system.support;
+package de.mq.odesolver.solve.support;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +16,7 @@ class OdeSystemResultImplTest {
 
 	final double ERROR_ESTIMATION = randomDouble();
 
-	final OdeResult odeResult = new OdeSystemResultImpl(Y, X, ERROR_ESTIMATION);
+	final OdeResult odeResult = new OdeResultImpl(Y, X, ERROR_ESTIMATION);
 
 	private static double randomDouble() {
 		return Math.random() * 10;

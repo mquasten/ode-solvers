@@ -29,7 +29,7 @@ class OdeSolverServiceImplTest {
 	@ParameterizedTest
 	@EnumSource
 	void odeSolver(final Language language) {
-		Arrays.asList(Algorithm.values()).stream().filter(algorithm -> !algorithm.isSystem()).forEach(algorithm -> odeSolverService.odeSolver(language, algorithm, ODE_STRING));
+		Arrays.asList(Algorithm.values()).stream().forEach(algorithm -> assertEquals(algorithm.isSystem() ? OdeSystemSolverImpl.class: OdeSolverImpl.class, odeSolverService.odeSolver(language, algorithm, ODE_STRING).getClass()));
 	}
 
 	@ParameterizedTest
@@ -41,14 +41,26 @@ class OdeSolverServiceImplTest {
 	@ParameterizedTest
 	@EnumSource
 	void validateRightSide(final Language language) {
-		assertEquals(11d, odeSolverService.validateRightSide(language, ODE_STRING, Y, START));
+		assertEquals(11d, odeSolverService.validateRightSide(language, ODE_STRING, Y, START, false)[0]);
+	}
+	
+	@ParameterizedTest
+	@EnumSource
+	void validateRightSideSystem(final Language language) {
+		
+		
+		final var  dgl = "dy[0] = y[1]; dy[1] = 3 * y[0] - 2 * y[1]";
+		final double[] y = { 1, 4 };
+		double[] result = odeSolverService.validateRightSide(language, dgl, y, START, true);
+		assertEquals(y[1],result[0]);
+		assertEquals(3 * y[0] - 2 * y[1], result[1]);
 	}
 
 	@ParameterizedTest
 	@EnumSource
 	void validateRightSideWithOde(final Language language) {
 		final Ode ode = newOde(language);
-		assertEquals(11d, odeSolverService.validateRightSide(ode));
+		assertEquals(11d, odeSolverService.validateRightSide(ode)[0]);
 	}
 
 	private OdeImpl newOde(final Language language) {
@@ -58,7 +70,7 @@ class OdeSolverServiceImplTest {
 	@ParameterizedTest
 	@EnumSource
 	void validateInvalid(final Language language) {
-		assertThrows(IllegalArgumentException.class, () -> odeSolverService.validateRightSide(language, "y[0]/x", Y, 0));
+		assertThrows(IllegalArgumentException.class, () -> odeSolverService.validateRightSide(language, "y[0]/x", Y, 0, false));
 	}
 
 	@ParameterizedTest

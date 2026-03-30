@@ -41,7 +41,7 @@ class FunctionSolverImplTest {
 	@ParameterizedTest
 	@EnumSource
 	void solveWithLamdaLanguages(final Language language) {
-		final FunctionSolver functionSolver = new FunctionSolverImpl(newOdeFunctionUtil(language, "k"),"1/2*Math.pow(x,4)+k[0]*Math.pow(x,2)+k[1]*Math.pow(x,3)");
+		final FunctionSolver functionSolver = new FunctionSolverImpl(newOdeFunctionUtil(language, "k", false),"1/2*Math.pow(x,4)+k[0]*Math.pow(x,2)+k[1]*Math.pow(x,3)");
 		solveFunction(functionSolver);
 	}
 }

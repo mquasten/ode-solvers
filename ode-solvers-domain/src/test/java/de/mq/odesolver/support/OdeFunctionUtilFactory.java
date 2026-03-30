@@ -8,8 +8,12 @@ public interface  OdeFunctionUtilFactory {
 		 return new OdeFunctionUtilImpl(language);
 	 }
 	 
-	 public static OdeFunctionUtil newOdeFunctionUtil(final Language language, final String vectorName) {
-		 return new OdeFunctionUtilImpl(language, vectorName);
+	 public static OdeFunctionUtil newOdeFunctionUtil(final Language language, final boolean resultIsVector) {
+		 return new OdeFunctionUtilImpl(language,resultIsVector);
+	 }
+	 
+	 public static OdeFunctionUtil newOdeFunctionUtil(final Language language, final String vectorName, final boolean resultIsVector) {
+		 return new OdeFunctionUtilImpl(language, vectorName, resultIsVector);
 	 }
 
 }

@@ -36,8 +36,8 @@ public interface OdeSolverService {
 
 	List<OdeResult> solve(final Ode ode);
 
-	double validateRightSide(final Language language, final String function, final double y0[], final double x0);
+	double[] validateRightSide(final Language language, final String function, final double y0[], final double x0, final boolean system);
 
-	double validateRightSide(final Ode ode);
+	double[] validateRightSide(final Ode ode);
 
 }

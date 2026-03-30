@@ -1,4 +1,4 @@
-package de.mq.odesolver.system.support;
+package de.mq.odesolver.solve.support;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ class OdeSystemSolverImpl implements OdeSolver {
 	public List<OdeResult> solve(final double[] y0, final double start, final double stop, final int steps) {
 
 		final FirstOrderDifferentialEquations ode = new SimpleFirstOrderDifferentialEquationsImpl(resultCalculator, y0.length);
-
+		// y0[] soll nicht überschrieben werden.
 		final double[] y = y0.clone();
 
 		final List<OdeResult> results = new ArrayList<>();
@@ -42,11 +42,11 @@ class OdeSystemSolverImpl implements OdeSolver {
 		final StepHandler stepHandler = new StepHandler() {
 			public void init(double t0, double[] y0, double t) {
 				results.clear();
-				results.add(new OdeSystemResultImpl(y0.clone(), t0, ERROR_SIZE));
+				results.add(new OdeResultImpl(y0.clone(), t0, ERROR_SIZE));
 			}
 
 			public void handleStep(StepInterpolator interpolator, boolean isLast) {
-				results.add(new OdeSystemResultImpl(interpolator.getInterpolatedState().clone(), interpolator.getCurrentTime(), ERROR_SIZE));
+				results.add(new OdeResultImpl(interpolator.getInterpolatedState().clone(), interpolator.getCurrentTime(), ERROR_SIZE));
 
 			}
 		};
@@ -55,5 +55,5 @@ class OdeSystemSolverImpl implements OdeSolver {
 		firstOrderIntegrator.integrate(ode, start, y, stop, y);
 		return results;
 	}
-
+ 
 }

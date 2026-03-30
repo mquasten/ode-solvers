@@ -8,6 +8,7 @@ import javax.script.Invocable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import de.mq.odesolver.solve.support.OdeSystemResultCalculator;
 import de.mq.odesolver.support.OdeFunctionUtil.Language;
 
 
@@ -80,7 +81,7 @@ class OdeFunctionUtilTest {
 	@ParameterizedTest
 	@EnumSource
 	void invokeFunctionWithVector(final Language language) {
-		final OdeFunctionUtil odeFunctionUtil = new OdeFunctionUtilImpl(language, "k");
+		final OdeFunctionUtil odeFunctionUtil = new OdeFunctionUtilImpl(language, "k", false);
 		
 		final Invocable invocable = odeFunctionUtil.prepareFunction("1/2*Math.pow(x,4) + k[0]*Math.pow(x,2) + k[1]*Math.pow(x,2)");
 		
@@ -91,15 +92,16 @@ class OdeFunctionUtilTest {
 	@ParameterizedTest
 	@EnumSource
 	void berechneDglSystem(final Language language) {
-		final OdeFunctionUtil odeFunctionUtil = new OdeFunctionUtilImpl(language);
-		final Invocable invocable = odeFunctionUtil.prepareFunction("[y[1],y[2],y[0]+y[1]+y[2]]");
-
-		final double [] results = odeFunctionUtil.invokeVectorFunction(invocable, new double[] { 1, 2, 3 }, 3);
+		final OdeFunctionUtil  odeFunctionUtil =   new OdeFunctionUtilImpl(language, true);
+		final var system  = "dy[0]=y[1];dy[1]=y[2];dy[2]=y[0]+y[1]+y[2];";
+		final Invocable invocable= odeFunctionUtil.prepareFunction(system);
+		final OdeSystemResultCalculator odeSystemResultCalculator = invocable.getInterface(OdeSystemResultCalculator.class);
+		final double[] results = odeSystemResultCalculator.f(new double[] { 1, 2, 3 }, 1d);
+		
 		assertEquals(3, results.length);
 		assertEquals(2d, results[0]);
 		assertEquals(3, results[1]);
 		assertEquals(6, results[2]);
-		
 	}
 	
 

@@ -1,4 +1,4 @@
-package de.mq.odesolver.system.support;
+package de.mq.odesolver.solve.support;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +42,7 @@ class CommonsMath3Test {
 
 	};
 
-	// y''=-2*y+3*y
+	// y''=-2*y'+3*y
 	// allgemeine Lösung: y= C1*exp(x)+C2*exp(-3 * x)
 	// y(0)=0, y'(0)=4: spezielle Lösung: y=exp(x)-exp(-3 * x)
 	private final FirstOrderDifferentialEquations dgl02 = new FirstOrderDifferentialEquations() {
@@ -91,11 +91,11 @@ class CommonsMath3Test {
 		final StepHandler stepHandler = new StepHandler() {
 			public void init(double t0, double[] y0, double t) {
 				results.clear();
-				results.add(new OdeSystemResultImpl(y0.clone(), t0, ERROR_SIZE));
+				results.add(new OdeResultImpl(y0.clone(), t0, ERROR_SIZE));
 			}
 
 			public void handleStep(StepInterpolator interpolator, boolean isLast) {
-				results.add(new OdeSystemResultImpl(interpolator.getInterpolatedState().clone(), interpolator.getCurrentTime(), ERROR_SIZE));
+				results.add(new OdeResultImpl(interpolator.getInterpolatedState().clone(), interpolator.getCurrentTime(), ERROR_SIZE));
 
 			}
 		};
@@ -134,5 +134,7 @@ class CommonsMath3Test {
 		});
 
 	}
+	
+	
 
 }

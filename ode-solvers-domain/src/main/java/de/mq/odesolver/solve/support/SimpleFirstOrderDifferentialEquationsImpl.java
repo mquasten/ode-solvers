@@ -1,4 +1,4 @@
-package de.mq.odesolver.system.support;
+package de.mq.odesolver.solve.support;
 
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
@@ -20,7 +20,7 @@ class SimpleFirstOrderDifferentialEquationsImpl implements FirstOrderDifferentia
 	public final void computeDerivatives(final double t, final double[] y, final double[] yDot) throws MaxCountExceededException, DimensionMismatchException {
 		sizeGuard(y, "y");
 		sizeGuard(yDot, "y'");
-		final double[] result = resultCalculator.calculate(t, y);
+		final double[] result = resultCalculator.f(y,t);
 		sizeGuard(result, "Result");
 
 		System.arraycopy(result, 0, yDot, 0, result.length);
