@@ -72,13 +72,15 @@ class SolveControllerTest extends BasicMockitoControllerTest {
 		assertEquals(odeSessionModel().getSettings().getScriptLanguage(), attributes().get(SolveController.ATTRIBUTE_SCRIPT_LANGUAGE));
 		@SuppressWarnings("unchecked")
 		final List<Entry<String, String>> algorithms = (List<Entry<String, String>>) attributes().get(SolveController.ATTRIBUTE_ALGORITHMS);
-		assertEquals(3, algorithms.size());
-		assertEquals(Algorithm.RungeKutta4thOrder.name(), algorithms.get(0).getKey());
-		assertEquals(Algorithm.RungeKutta4thOrder.name(), algorithms.get(0).getValue());
-		assertEquals(Algorithm.RungeKutta2ndOrder.name(), algorithms.get(1).getKey());
-		assertEquals(Algorithm.RungeKutta2ndOrder.name(), algorithms.get(1).getValue());
-		assertEquals(Algorithm.EulerPolygonal.name(), algorithms.get(2).getKey());
-		assertEquals(Algorithm.EulerPolygonal.name(), algorithms.get(2).getValue());
+		assertEquals(4, algorithms.size());
+		assertEquals(Algorithm.DormandPrince853Integrator.name(), algorithms.get(0).getKey());
+		assertEquals(Algorithm.DormandPrince853Integrator.name(), algorithms.get(0).getValue());
+		assertEquals(Algorithm.RungeKutta4thOrder.name(), algorithms.get(1).getKey());
+		assertEquals(Algorithm.RungeKutta4thOrder.name(), algorithms.get(1).getValue());
+		assertEquals(Algorithm.RungeKutta2ndOrder.name(), algorithms.get(2).getKey());
+		assertEquals(Algorithm.RungeKutta2ndOrder.name(), algorithms.get(2).getValue());
+		assertEquals(Algorithm.EulerPolygonal.name(), algorithms.get(3).getKey());
+		assertEquals(Algorithm.EulerPolygonal.name(), algorithms.get(3).getValue());
 	}
 	
 	
