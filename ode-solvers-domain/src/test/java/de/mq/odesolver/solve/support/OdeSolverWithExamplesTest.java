@@ -97,7 +97,7 @@ class OdeSolverWithExamplesTest {
 
 	enum TestDgl {
 		DGL01(odeArguments -> odeArguments.yDerivative(0) - odeArguments.x(), "y[0]-x"),
-		DGL02(odeArguments -> 0d, "0.0"),
+		DGL02(_ -> 0d, "0.0"),
 		DGL03(odeArguments -> Math.sqrt(odeArguments.yDerivative(0)) + odeArguments.yDerivative(0),
 				"Math.sqrt(y[0])+y[0]"),
 		DGL04(odeArguments -> 3 * odeArguments.yDerivative(0) - 2 * odeArguments.yDerivative(1), "3*y[0]-2*y[1]"),

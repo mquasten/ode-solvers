@@ -4,18 +4,14 @@ import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import de.mq.odesolver.solve.Ode;
 import de.mq.odesolver.solve.OdeSolverService.Algorithm;
 import de.mq.odesolver.support.OdeFunctionUtil.Language;
 
-/**
- * Input Values from solve valid and with correct types
- * 
- * @author mq
- *
- */
+
 class OdeImpl implements Ode {
 
 	private final String REGEX_Y_DERIVATIVE = "y\\[\\s*%s\\s*\\]";
@@ -54,7 +50,27 @@ class OdeImpl implements Ode {
 	@Override
 	public final boolean checkOrder(final int order) {
 		Validate.isTrue(order > 0);
+		if (algorithm.isSystem()) {
+			return parseOrderfromSystem() == order;
+		}
 		return y.length == order;
+	}
+
+	private int parseOrderfromSystem() {
+		final String[] parts = StringUtils.splitByWholeSeparator(StringUtils.deleteWhitespace(ode), "dy[");
+		int order = -1;
+		for (int i = 0; i < parts.length; i++) {
+			final String index = parts[i].replaceFirst("\\]=.*", "");
+			if (!StringUtils.isNumeric(index)) {
+				return -1;
+			}
+			order = Integer.max(order, Integer.parseInt(index));
+		}
+		if (order < 0) {
+			return -1;
+		}
+
+		return order + 1;
 	}
 
 	@Override
@@ -99,9 +115,30 @@ class OdeImpl implements Ode {
 
 	@Override
 	public final String beautifiedOde() {
+		if (this.algorithm.isSystem()) {
+			return beautifiedOdeSystem();
+		}
+
 		final String prefix = y.length == 1 ? "y'=" : "y''=";
 		return prefix + ode.replaceAll(String.format(REGEX_Y_DERIVATIVE, 0), "y").replaceAll(String.format(REGEX_Y_DERIVATIVE, 1), "y'");
 
+	}
+
+	private String beautifiedOdeSystem() {
+		final String[] parts = StringUtils.splitByWholeSeparator(StringUtils.deleteWhitespace(ode), "dy[");
+		final StringBuffer buffer = new StringBuffer();
+
+		for (int i = 0; i < parts.length; i++) {
+			final String index = parts[i].replaceFirst("\\]=.*", "");
+			Validate.isTrue(StringUtils.isNumeric(index), "Left side index shoud be a Number.");
+			final String gleichung = parts[i].replaceFirst(index + "\\]=", "");
+			buffer.append("y" + (Integer.parseInt(index) + 1) + "'" + "=" + gleichung + " ");
+		}
+		String odeString = buffer.toString();
+		for (int i = 0; i < parts.length; i++) {
+			odeString = odeString.replaceAll("y\\[" + i + "\\]", "y" + (i + 1));
+		}
+		return odeString.trim();
 	}
 
 }

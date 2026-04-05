@@ -32,8 +32,8 @@ public class BasicMockitoControllerTest {
 		Mockito.doAnswer(a -> a.getArguments()[0]).when(messageSource).getMessage(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
 		Mockito.doAnswer(a -> attributes.put(a.getArgument(0, String.class), a.getArgument(1))).when(model).addAttribute(Mockito.anyString(), Mockito.any());
 		Mockito.doAnswer(a -> globalErrors.add(a.getArgument(0))).when(bindingResult).addError(Mockito.any(ObjectError.class));
-		Mockito.doAnswer(a -> !globalErrors.isEmpty()).when(bindingResult).hasGlobalErrors();
-		Mockito.doAnswer(a -> !globalErrors.isEmpty()).when(bindingResult).hasErrors();
+		Mockito.doAnswer(_ -> !globalErrors.isEmpty()).when(bindingResult).hasGlobalErrors();
+		Mockito.doAnswer(_ -> !globalErrors.isEmpty()).when(bindingResult).hasErrors();
 	}
 
 	protected BindingResult bindingResult() {

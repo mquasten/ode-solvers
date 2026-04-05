@@ -15,10 +15,12 @@
 	<properties>
 		<maven.compiler.source>25</maven.compiler.source>
 		<maven.compiler.target>25</maven.compiler.target>
+		<java.version>25</java.version>
 		<poi-version>5.2.2</poi-version>
 		<jfreechart-version>1.0.13</jfreechart-version>
 		<surefire-plugin-version>3.5.5</surefire-plugin-version>
 		<junit-jupiter-version>5.12.0</junit-jupiter-version>
+		<mockito-core-version>4.8.1</mockito-core-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -73,7 +75,14 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-inline</artifactId>
 			<scope>test</scope>
-		</!dependency-->
+		</dependency-->
+		
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -101,9 +110,13 @@
 			</plugin>
 			
 			
-	
 			
-		</plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+		</plugin>
+			
+	
+</plugins>
 	</build>
 
 </project>

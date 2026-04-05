@@ -82,7 +82,7 @@ public class ResultModel {
 
 		IntStream.range(0, initialValue.yDerivatives().length).forEach(i -> {
 			final StringBuffer text = new StringBuffer(KEY_Y);
-			IntStream.rangeClosed(1, i).forEach(k -> text.append("'"));
+			IntStream.rangeClosed(1, i).forEach(_ -> text.append("'"));
 			text.append("(x0)");
 			initialValues.add(new SimpleImmutableEntry<>(text.toString(), initialValue.yDerivative(i)));
 		});
@@ -107,7 +107,7 @@ public class ResultModel {
 		final Optional<Double> max = results.stream().map(r -> r.yDerivative(yDerivative))
 				.max((x1, x2) -> x1.compareTo(x2));
 		final StringBuffer text = new StringBuffer(KEY_Y);
-		IntStream.rangeClosed(1, yDerivative).forEach(i -> text.append("'"));
+		IntStream.rangeClosed(1, yDerivative).forEach(_ -> text.append("'"));
 		
 		min.ifPresent(minVal -> max.ifPresent(maxVal -> ranges.add(new SimpleImmutableEntry<>(text.toString(), FunctionResultImpl.doubleArray(minVal, maxVal)))));
 		

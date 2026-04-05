@@ -66,7 +66,7 @@ public class ResultsGraphView extends AbstractView {
 
 		IntStream.range(0, results.get(0).yDerivatives().length).forEach(i -> {
 			final StringBuffer text = new StringBuffer(COLUMN_HEADER_Y);
-			IntStream.rangeClosed(1, i).forEach(k -> text.append("'"));
+			IntStream.rangeClosed(1, i).forEach(_ -> text.append("'"));
 
 			final XYSeries series = new XYSeries(text);
 			results.forEach(result -> series.add(result.x(), result.yDerivative(i)));

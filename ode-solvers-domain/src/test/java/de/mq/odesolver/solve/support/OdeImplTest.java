@@ -21,10 +21,20 @@ class OdeImplTest {
 	private static final double[] Y0 = new double[] {0,1};
 	private static final String ODE2 = "y[1]/y[0]+x";
 	
+	private static final String ODE2_SYSTEM ="dy[0]= y[1];\n dy[1]=y[1]/y[0]+x";
+	
+	
+	
 	private final Ode ode = newOde2();
+	
+	private final Ode ode2System= newOde2System();
 
 	private Ode newOde2() {
 		return new OdeImpl(Language.Nashorn, ODE2, Algorithm.RungeKutta4thOrder, Y0, START, STOP, STEPS );
+	}
+	
+	private Ode newOde2System() {
+		return new OdeImpl(Language.Nashorn, ODE2_SYSTEM, Algorithm.DormandPrince853Integrator, Y0, START, STOP, STEPS );
 	}
 	
 	private Ode newOde1() {
@@ -52,6 +62,11 @@ class OdeImplTest {
 	}
 	
 	@Test
+	void beautifiedOdeSystem() {
+		assertEquals("y1'=y2; y2'=y2/y1+x", ode2System.beautifiedOde());
+	}
+	
+	@Test
 	void algorithm() {
 		assertEquals(Algorithm.RungeKutta4thOrder, ode.algorithm());
 	}
@@ -66,6 +81,40 @@ class OdeImplTest {
 		assertTrue(ode.checkOrder(2));
 		assertFalse(ode.checkOrder(1));
 	}
+	
+	
+	@Test
+	void checkOrderSystem() throws Exception {
+		assertTrue(ode2System.checkOrder(2));
+		assertFalse(ode2System.checkOrder(3));
+	    final var  field =OdeImpl.class.getDeclaredField("ode");
+	    field.setAccessible(true);
+	    field.setAccessible(true);
+	    field.set(ode2System, ODE2);
+	    assertFalse(ode2System.checkOrder(2));
+	}
+	
+	@Test
+	void checkOrderSystemNoSystem() throws Exception {
+	    final var  field =OdeImpl.class.getDeclaredField("ode");
+	    field.setAccessible(true);
+	    field.setAccessible(true);
+	    field.set(ode2System, ODE2);
+	    assertFalse(ode2System.checkOrder(2));
+	    field.set(ode2System, "");
+	    assertFalse(ode2System.checkOrder(2));
+	}
+	
+	@Test
+	void checkOrderSystemOdeEmpty() throws Exception {
+	    final var  field =OdeImpl.class.getDeclaredField("ode");
+	    field.setAccessible(true);
+	    field.setAccessible(true);
+	    field.set(ode2System, "");
+	    assertFalse(ode2System.checkOrder(2));
+	}
+	
+	
 	@ParameterizedTest
 	@ValueSource(ints = {0,-1})
 	void ckeckOrderWrongOrder(final int order) {
